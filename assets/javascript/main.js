@@ -1,4 +1,4 @@
-// $(document).ready(function() {
+
 
 var config = {
     apiKey: "AIzaSyBNMQpsYPcERKLRleZ-ILYffKwaEHnhi-8",
@@ -13,17 +13,11 @@ var config = {
   
   var database = firebase.database();
 
-  // var name = "";
-  // var destination = "";
-  // var time = "";
-  // var frequency = 0;
-
 $("#submitButton").on("click", function() {
   event.preventDefault();
-
+  //assigning variable to inputs from html
   var trainName = $("#inputName").val().trim();
   var trainDestination = $("#inputDestination").val().trim();
-  //come back to this and work in "moments" for time calculation
   var trainTime = $("#inputTime").val().trim();
   var trainFrequency = $("#inputFreq").val().trim();
 
@@ -51,42 +45,42 @@ database.ref().push(newTrain);
 database.ref().on("child_added", function(childSnapshot, prevChildKey) {
 
   console.log(childSnapshot.val());
-
+//getting data from inputs to display in firebase
   var name = childSnapshot.val().name;
   var destination = childSnapshot.val().destination;
   var time = childSnapshot.val().time;
   var frequency = childSnapshot.val().frequency;
   
 
-  console.log(Name); 
+  console.log(name); 
   console.log(destination);
   console.log(time);
   console.log(frequency);
 
   //time of first train converted to military time
-  var firstTrain = moment(trainTime, "HH:mm");
+  var firstTrain = moment(time, "HH:mm");
 
   //current time
   var timeNow = moment();
 
- //difference 
+  //calculates in min diff between first train and now 
   var firstArrive = timeNow.diff(firstTrain, 'minutes');
 
+  //calculates last train time
+  var last = firstArrive  % frequency;
 
-  var last = arrive  % frequency;
+  //calculates how far away next train is
+  var minAway = frequency - last;
 
+  //calculates in min how far away the train is from now
+  var nextArriveTime = timeNow.add(minAway, 'minutes');
 
-  var away = frequency - last;
-
-
-  var nextArriveTime = timeNow.add(away, 'minutes');
-
-  //formatting next train arrival time
+  //actually disaplys in mins how many min away the next train is
   var displayTime = nextArriveTime.format("HH:mm");
 
  
 // adding data to table
-$(".table").append("<tr><td>" + trainname + "</td><td>" + destination + "</td><td>" + frequency + "</td><td>" + arrivaltime + "</td><td>" + awayTrain + "</td>");
+$(".table").append("<tr><td>" + name + "</td><td>" + destination + "</td><td>" + frequency + "</td><td>" + displayTime + "</td><td>" + minAway + "</td>");
 
 // Handle the errors
 }, function(errorObject) {
