@@ -1,0 +1,19 @@
+body {
+    font-family: 'Alegreya Sans SC', sans-serif;
+    background: antiquewhite;
+}
+
+.container {
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+.jumbotron {
+    text-align: center;
+    background-color: rgba(31, 19, 31, 0.548);
+
+}
+
+.panel {
+    background-color: rgb(246, 220, 247);
+}
